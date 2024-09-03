@@ -42,8 +42,8 @@ Process getWindowProcess (HWND handle) {
     wchar_t exeName[MAX_PATH]{};
 
     QueryFullProcessImageNameW (pHandle, 0, exeName, &dwSize);
-    
-    CloseHandle(pHandle);
+
+    CloseHandle (pHandle);
 
     auto wspath (exeName);
     auto path = toUtf8 (wspath);
@@ -394,7 +394,31 @@ Napi::Object getMonitorInfo (const Napi::CallbackInfo& info) {
     return obj;
 }
 
+
+UINT GetWindowPlacement (HWND hwnd) {
+    WINDOWPLACEMENT placement;
+    placement.length = sizeof (WINDOWPLACEMENT);
+    if (GetWindowPlacement (hwnd, &placement)) return placement.showCmd;
+    return UINT_MAX;
+}
+
+Napi::Number GetWindowPlacementJS (const Napi::CallbackInfo& info) {
+    Napi::Env env{ info.Env () };
+
+    if (info.Length () < 1 || !info[0].IsNumber ()) {
+        Napi::TypeError::New (env, "Wrong arguments").ThrowAsJavaScriptException ();
+        return Napi::Number::New (env, UINT_MAX);
+    }
+
+    HWND hwnd = (HWND)(uintptr_t)info[0].As<Napi::Number> ().Int64Value ();
+    UINT result = GetWindowPlacement (hwnd);
+
+    return Napi::Number::New (env, result);
+}
+
 Napi::Object Init (Napi::Env env, Napi::Object exports) {
+    exports.Set (Napi::String::New (env, "GetWindowPlacement"), Napi::Function::New (env, GetWindowPlacementJS));
+
     exports.Set (Napi::String::New (env, "getActiveWindow"), Napi::Function::New (env, getActiveWindow));
     exports.Set (Napi::String::New (env, "getMonitorFromWindow"), Napi::Function::New (env, getMonitorFromWindow));
     exports.Set (Napi::String::New (env, "getMonitorScaleFactor"),

@@ -1,7 +1,7 @@
 import { addon } from "..";
 import extractFileIcon from "extract-file-icon";
 import { Monitor } from "./monitor";
-import { IRectangle } from "../interfaces";
+import { IRectangle, WindowShowState } from "../interfaces";
 import { EmptyMonitor } from "./empty-monitor";
 
 export class Window {
@@ -34,6 +34,12 @@ export class Window {
     }
 
     return bounds;
+  }
+
+  getStatus(): WindowShowState {
+    if (!addon || !addon.GetWindowPlacement)
+      new Error("GetWindowPlacement is undefined");
+    return addon.GetWindowPlacement(this.id);
   }
 
   setBounds(bounds: IRectangle) {

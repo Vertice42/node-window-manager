@@ -4,6 +4,7 @@ import { platform } from "os";
 import { Monitor } from "./classes/monitor";
 import { EmptyMonitor } from "./classes/empty-monitor";
 import { resolve } from 'path';
+import { WindowShowState } from "./interfaces";
 
 let addon: any;
 
@@ -34,7 +35,7 @@ class WindowManager extends EventEmitter {
       if (event === "window-activated") {
         interval = setInterval(async () => {
           const win = addon.getActiveWindow();
-          
+
           if (lastId !== win) {
             lastId = win;
             this.emit("window-activated", new Window(win));
@@ -72,6 +73,12 @@ class WindowManager extends EventEmitter {
     if (!addon || !addon.getWindows) return [];
     return addon.getWindows().map((win: any) => new Window(win)).filter((x: Window) => x.isWindow());
   };
+
+  GetWindowPlacement = (hwnd: number): WindowShowState => {
+    if (!addon || !addon.GetWindowPlacement)
+       new Error("GetWindowPlacement is undefined");
+    return addon.GetWindowPlacement(hwnd);
+  }
 
   getMonitors = (): Monitor[] => {
     if (!addon || !addon.getMonitors) return [];

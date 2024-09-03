@@ -9,7 +9,7 @@
     "watch": "tsc --watch",
     "install": "npm run rebuild",
     "rebuild": "node-gyp rebuild",
-    "rebuild-dev": "npm run rebuild -- --debug",
+    "rebuild-dev": "npm run rebuild -- --debug && npm run rebuild",
     "prepublishOnly": "npm run rebuild",
     "prepare": "npm run build"
   },
@@ -17,13 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/sentialx/node-window-manager.git"
   },
-  "keywords": [
-    "window-manager",
-    "native",
-    "macos",
-    "linux",
-    "windows"
-  ],
   "author": "sentialx",
   "license": "MIT",
   "bugs": {
@@ -32,13 +25,13 @@
   "homepage": "https://github.com/sentialx/node-window-manager#readme",
   "devDependencies": {
     "@types/node": "13.11.1",
-    "node-gyp": "^6.1.0",
+    "node-gyp": "^10.2.0",
     "tslint": "6.1.1",
-    "typescript": "3.8.3"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "extract-file-icon": "^0.3.2",
-    "node-addon-api": "2.0.0",
+    "node-addon-api": "^8.1.0",
     "node-gyp-build": "^4.2.1"
   }
 }

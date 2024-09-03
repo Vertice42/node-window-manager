@@ -53,5 +53,9 @@
     "mutex": "cpp",
     "ratio": "cpp",
     "thread": "cpp"
-  }
+  },
+  "cSpell.words": [
+    "hwnd",
+    "WINDOWPLACEMENT"
+  ]
 }
